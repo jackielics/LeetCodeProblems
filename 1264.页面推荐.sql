@@ -6,7 +6,7 @@
 
 -- @lc code=start
 # Write your MySQL query statement below
-select distinct l.page_id as recommended_page
+select (distinct l.page_id) as recommended_page
 from (select case 
         when user1_id = 1 then user2_id 
         when user2_id = 1 then user1_id 
