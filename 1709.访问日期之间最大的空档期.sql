@@ -28,13 +28,7 @@ group by    user_id  */
 
 /* 大神的解法 */
 
-/* SELECT
-    user_id,
-    visit_date,
-    LEAD(visit_date, 1, '2021-1-1') OVER (PARTITION BY user_id ORDER BY visit_date) AS next_day # 根据user_id分批，按照时间正序取lead
-FROM UserVisits */
-
-/* SELECT
+SELECT
     user_id,
     MAX(DATEDIFF(next_day, visit_date)) AS biggest_window
 FROM (
@@ -45,11 +39,7 @@ FROM (
     FROM UserVisits
 ) tmp
 GROUP BY user_id
-ORDER BY user_id */
-
-select user_id, DENSE_RANK() over (order by user_id asc) as 'rk'
-from UserVisits uv
-
+ORDER BY user_id
 
 -- @lc code=end
 
