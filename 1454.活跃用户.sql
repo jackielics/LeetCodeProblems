@@ -6,7 +6,7 @@
 -- @lc code=start
 # Write your MySQL query statement below
 SELECT DISTINCT
-    id, 
+    id,
     name
 FROM    
 (SELECT DISTINCT --
