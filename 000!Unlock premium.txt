@@ -1,0 +1,3 @@
+https://github.com/LeetCode-OpenSource/vscode-leetcode/issues/409#issuecomment-626111409
+
+Just add "paid": true to ~/.LC/user.json and ~/.LC/leetcode.cn/user.json

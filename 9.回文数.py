@@ -6,6 +6,15 @@
 
 # @lc code=start
 class Solution:
-    def isPalindrome(self, x: int) -> bool:
+	def isPalindrome(self, x: int) -> bool:
+		if x < 0: return False
+		if str(x) == str(x)[::-1]:
+			return True
+		else:	
+			return False
+	
+	# Master's solution: clean and short
+	def isPalindrome(self, x: int) -> bool:
+		return str(x) == str(x)[::-1]
 # @lc code=end
 
