@@ -6,10 +6,9 @@
 
 # @lc code=start
 class Solution:
-	def checkInclusion(self, s1: str, s2: str) -> bool:
+	def checkInclusion0(self, s1: str, s2: str) -> bool:
 		'''
-		s1 = "ab" 
-		s2 = "eidbaooo"
+		My Solution0: use LIST to store frequency of each character
 		'''
 		if len(s1) > len(s2):
 			return False
@@ -48,6 +47,32 @@ class Solution:
 			
 		return matches == 26
 
-# Reference: https://www.youtube.com/watch?v=UbyhOgBN834
+	def checkInclusion1(self, s1: str, s2: str) -> bool:
+		'''
+		My Solution1: use DICT
+		'''
+		if len(s1) > len(s2):
+			return False
+		
+		d1, d2 = {}, {} # dict to store each letter's frequency
+		
+		for i in range(len(s1)):
+			d1[s1[i]] = d1.get(s1[i], 0) + 1
+			d2[s2[i]] = d2.get(s2[i], 0) + 1
+		
+		if d1 == d2: # 是否在开头就匹配成功
+			return True
+
+		for r in range(len(s1), len(s2)):
+			d2[s2[r]] = d2.get(s2[r], 0) + 1
+			lp = r - len(s1) # 之前的l左端点
+			d2[s2[lp]] -= 1
+			if d2[s2[lp]] == 0: # 删除值为0的键值对
+				d2.pop(s2[lp]) 
+			if d2 == d1:
+				return True
+		
+		return False
+
 # @lc code=end
 

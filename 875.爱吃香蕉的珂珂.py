@@ -5,12 +5,18 @@
 #
 
 # @lc code=start
-# Binary Search
 class Solution:
 	def minEatingSpeed(self, piles: List[int], h: int) -> int:
-		l, r = 1, max(piles)
+		'''
+		My Solution: updating min speed in Binary Search
+		Time Complexity: 	O(N * log(max(piles)))
+		Space Complexity:	O(1)
+		'''
+		if len(piles) == h: # 小时数等于堆数
+			return max(piles)
+		
+		l, r = 1, max(piles) # 可能的速度范围
 		res = r
-		import math
 		while(l <= r):
 			k = (l + r) // 2 # 向下整除
 			# 向上取整，实际花费时长
@@ -22,9 +28,8 @@ class Solution:
 			elif hours > h:
 				# 实际花费大于预计花费，说明速度太慢了，需要加快速度
 				l = k + 1
-		
 		return res
-
+	
 
 # Reference: https://www.youtube.com/watch?v=U2SozAs9RzA
 # @lc code=end
