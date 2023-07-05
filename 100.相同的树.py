@@ -1,0 +1,30 @@
+#
+# @lc app=leetcode.cn id=100 lang=python3
+#
+# [100] 相同的树
+#
+
+# @lc code=start
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+	def isSameTree(self, p: Optional[TreeNode], q: Optional[TreeNode]) -> bool:
+		'''
+        My Solution 0: Recursion
+		'''
+		# Recurison exit
+		if not p and not q: # both None
+			return True
+		elif not p or not q: # only one None
+			return False
+		elif p.val != q.val: # both exist but inequal
+			return False
+		
+		# Recurison body
+		return (self.isSameTree(p.left, q.left)) and (self.isSameTree(p.right, q.right))
+
+# @lc code=end
