@@ -7,7 +7,8 @@
 # @lc code=start
 class Node:
 	def __init__(self):
-		self.kids = {} # key-Node
+		self.par = None # parent Node
+		self.kids = {} # Key-Node
 		self.end = False # can it be an end
 
 class Solution:
@@ -15,67 +16,77 @@ class Solution:
 	iterate + DFS
 	1 <= m, n <= 12, 1 <= words.length <= 3 * 104
 	'''
+	def build_trie(self, words):
+		# Build a trie from words list
+		root = Node() # Root Node
+		for word in words:
+			cur = root # Current Node
+			for c in word:
+				if c not in cur.kids:
+					# Build if non-existent
+					cur.kids[c] = Node()
+					cur.kids[c].par = cur
+				cur = cur.kids[c] # move next
+			cur.end = True # end of a word
+		return root # return root Node 
+	
 	def findWords(self, board: List[List[str]], words: List[str]) -> List[str]:
 		ROWS, COLS = len(board), len(board[0]) # len of rows and cols
 		visited = set() # already visited
-		res_lst = []
-
-		def build_trie(words):
-			# Build a trie from words list
-			root = Node() # Root Node
-			for word in words:
-				cur = root # Current Node
-				for c in word:
-					if c not in cur.kids:
-						# Build if not exist
-						cur.kids[c] = Node()
-					cur = cur.kids[c] # move next
-				cur.end = True # end of a word
-
-			return root # return root Node 
+		res = []
+		root = self.build_trie(words)
+		
+		def prune(cur, chars):
+			# prune node along chars that have only one node
+			for c in chars[::-1]:
+				if not cur.kids:
+					cur = cur.par # move upward
+					cur.kids.pop(c) # delete child
+				else:
+					break
 
 
-		def dfs(i, j, cur):
+		def dfs(i, j, cur, chars):
 			'''
 			DFS start from board[i][j]
 			i	: row index
 			j	: col index
 			cur	: current Node
+			chars: current string
 			'''
-			if cur == None: # already reach the end
-				return True
-			
+			# ch = board[i][j] # cur char 
 			if (not -1 < i < ROWS or 
        			not -1 < j < COLS or 
 				(i, j) in visited or 
-				board[i][j] not in cur.kids):
+				(ch := board[i][j]) not in cur.kids):
 				# repeat || out-of-bound || don't match
-				return False
+				return 
 			# if board[i][j] in cur.kids:
 			visited.add((i, j)) # add to visited
+			
+			chars = chars + ch
 
-			# search adjacent to match next char
-			# res = (dfs(i + 1, j, tar[1:]) or 
-	   		# 		dfs(i, j + 1, tar[1:]) or 
-	   		# 		dfs(i - 1, j, tar[1:]) or 
-	   		# 		dfs(i, j - 1, tar[1:])
-	   		# 		)
-			# visited.remove((i, j)) # delete after recursion finished
-			if cur.end:
-				res_lst.append()
+			if (cur := cur.kids[ch]).end: # reach end && move 
+				res.append(chars) # Return Sentence
+				cur.end = False # Avoid Duplicate
 				
-			return res
-		
-		break_flg = False
+				# TODO: HOW to prune？
+				# if len(cur.kids) == 0:
+				prune(cur, chars)
+
+			
+			# search adjacent to match next char
+			dfs(i + 1, j, cur, chars)
+			dfs(i, j + 1, cur, chars)
+			dfs(i - 1, j, cur, chars)
+			dfs(i, j - 1, cur, chars)
+			
+			visited.remove((i, j)) # delete after recursion finished
+
 		for i in range(ROWS):
 			for j in range(COLS):
-				pass
-			# 	if dfs(i, j, word):
-			# 		res_lst.append(word)
-			# 		break_flg = True
-			# 		break
-			# if break_flg:break
+				dfs(i, j, root, '')
 		
-		return res_lst
+		return res
 			
 # @lc code=end
