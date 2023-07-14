@@ -10,7 +10,14 @@
 			"@time: ${CURRENT_YEAR}/${CURRENT_MONTH}/${CURRENT_DATE} ${CURRENT_HOUR}:${CURRENT_MINUTE}",
 			"@project: huawei-od-python",
 			"@desc: ${TM_FILENAME_BASE}",
-			"\"\"\""
+			"@tags: ",
+			"\"\"\"",
+			"def sulotion():",
+			"\t\"\"\"",
+			"\t\"\"\"",
+			"\treturn\n",
+			"if __name__ == '__main__':",
+			"\t# assert solution( ) == ",
 		],
 		"description": "Python file template"
 	}

@@ -6,6 +6,7 @@
 @time: 2023/07/12 10:59
 @project: huawei-od-python
 @desc: 291_Maximum-Number-of-Substrings-Extracted
+@tags: String-Matching
 """
 def solution(A:list, B:list)->int:
 	# ababcecfdc
