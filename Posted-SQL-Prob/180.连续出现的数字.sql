@@ -6,7 +6,7 @@
 
 -- @lc code=start
 # Write your MySQL query statement below
-select distinct l2.Num as ConsecutiveNums # select 需要与distinct连用
+select distinct l2.Num as ConsecutiveNums # 'select distinct'
 from Logs l1, Logs l2, Logs l3
 where l1.Num = l2.Num 
     and l2.Num = l3.Num
