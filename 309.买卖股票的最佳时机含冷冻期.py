@@ -7,6 +7,35 @@
 # @lc code=start
 class Solution:
 	def maxProfit(self, prices: List[int]) -> int:
+		DP = {} # {(i_td, hold): max_total_prof}
+		def dfs(i, hold)->int:
+			'''
+			i: index of prices(today)
+			hold: be holding stocks or not
+			RETURN: One Day's Max Profit in given (i, status)
+			'''
+			if i >= len(prices): # over bound, transaction ends
+				return 0
+			# return directly if stored
+			if v := DP.get((i, hold), None):
+				return v
+
+			pause = dfs(i + 1, hold) # keep status, pause transaction
+
+			if hold: # be holding stocks right now
+				prof = dfs(i + 2, False) + prices[i] # After Selling at Today's Price
+				DP[(i, hold)] = max(pause, prof)
+			else: # not holding any stock
+				prof = dfs(i + 1, True) - prices[i] # After Buying at Today's Price
+				DP[(i, hold)] = max(pause, prof)
+			return DP[(i, hold)]
+
+		return dfs(0, False)
+
+	def maxProfit1(self, prices: List[int]) -> int:
+		'''
+		caching DP stores action type
+		'''
 		# possible actions
 		poss_act = {-2:[-2, 1], 
 					# Hold stock and wait: 
@@ -43,7 +72,7 @@ class Solution:
 			for act_tm in poss_act.get(act_td): # possible actions of tomorrow
 				res = max(res, dfs(i + 1, act_tm, prof_td))
 			DP[(i, act_td, prof_yt)] = res # store status
-			
+
 			return res # return max profit
 		
 		return max(dfs(0, 0, 0), dfs(0, -1, 0)) # starts with COOLDOWN or BUY

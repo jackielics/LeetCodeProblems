@@ -12,24 +12,23 @@ class Solution:
 		Time Complexity: 	O(N * log(max(piles)))
 		Space Complexity:	O(1)
 		'''
-		if len(piles) == h: # 小时数等于堆数
+		if len(piles) == h:
 			return max(piles)
 		
-		l, r = 1, max(piles) # 可能的速度范围
+		l, r = 1, max(piles) # possible speed range
 		res = r
 		while(l <= r):
-			k = (l + r) // 2 # 向下整除
-			# 向上取整，实际花费时长
+			k = (l + r) // 2 # floor
+			# ceiling，actual hours
 			hours = sum(list(map(lambda x : math.ceil(x / k), piles))) 
-			# 花费h小时的速度不唯一
+			# speed costing h hours is not unique
 			if hours <= h:
-				res = min(res, k) # 更新结果
-				r = k - 1 # 尝试找到更小的速度
+				res = min(res, k) # update speed
+				r = k - 1 # try finding slower speed
 			elif hours > h:
-				# 实际花费大于预计花费，说明速度太慢了，需要加快速度
+				# actual expenditure greater than expected, speed-up needed
 				l = k + 1
 		return res
 	
-
 # Reference: https://www.youtube.com/watch?v=U2SozAs9RzA
 # @lc code=end
