@@ -12,60 +12,61 @@ class Solution:
 		Time Complexity: O(n^2)
 		Space Complexity: O(n)
 		'''
-		nums.sort()
-		res = []
-		for i in range(len(nums) - 2):
-			if i > 0 and nums[i] == nums[i-1]: # Significantly reduce time
+		nums.sort() # sort asc
+		res = set()
+
+		for i in range(len(nums) - 2): # index of elem currently being used
+			# Skip duplicates, significantly reduce time
+			if i > 0 and nums[i] == nums[i - 1]:
 				continue
 
-			v = -nums[i]
-			l, r = i + 1, len(nums) -1
+			tar = -nums[i] # Target sum of two values 
+			l, r = i + 1, len(nums) - 1 # don't look back
 			while l < r:
-				if nums[l] + nums[r] == v:
-					res.append([nums[i], nums[l], nums[r]])
+				if nums[l] + nums[r] == tar:
+					res.add((nums[i], nums[l], nums[r]))
 					l += 1
 					r -= 1
-				elif nums[l] + nums[r] < v:
+				elif nums[l] + nums[r] < tar:
 					l += 1
 				else:
 					r -= 1
 		
-		setRes = set(tuple(i) for i in res)
-		# 换回二维list
-		res = [list(i) for i in setRes]
+		# transform from {(x,y,z)} to [[x,y,z]]
+		res = [list(x) for x in res] 
+
 		return res
 	
-	def threeSum1(self, nums: List[int]) -> List[List[int]]:
+	def threeSum(self, nums: List[int]) -> List[List[int]]:
 		'''
-		Master's Solution: 遇到重复的数，直接跳过
+		Master's Solution: skip duplicate in [l] or [r]
 		Time Complexity: O(n^2)
 		Space Complexity: O(1)
 		'''
-		nums.sort()
+		nums.sort() # sort asc
 		res = []
-		for i in range(len(nums) - 2):
-			if i > 0 and nums[i] == nums[i-1]: # Significantly reduce time
+		
+		for i in range(len(nums) - 2): # index of elem currently being used
+			# Skip duplicates, significantly reduce time
+			if i > 0 and nums[i] == nums[i - 1]: 
 				continue
 
-			v = -nums[i]
-			l, r = i + 1, len(nums) -1
+			tar = -nums[i] # Target sum of two values 
+			l, r = i + 1, len(nums) -1 # don't look back
 			while l < r:
-				# skip duplicate
-				flag = False
-				if l > i + 1 and nums[l] == nums[l-1]:
+				# skip duplicate in [l] or [r], then no duplicate will be in res
+				if l > i + 1 and nums[l] == nums[l - 1]:
 					l += 1
-					flag = True
-				if r < len(nums) - 1 and nums[r] == nums[r+1]:
+					continue
+				elif r < len(nums) - 1 and nums[r] == nums[r + 1]:
 					r -= 1
-					flag = True
-				if flag:
-					continue 
+					continue
 
-				if nums[l] + nums[r] == v:
+				if nums[l] + nums[r] == tar:
 					res.append([nums[i], nums[l], nums[r]])
 					l += 1
 					r -= 1
-				elif nums[l] + nums[r] < v:
+				elif nums[l] + nums[r] < tar:
 					l += 1
 				else:
 					r -= 1
