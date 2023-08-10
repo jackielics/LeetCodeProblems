@@ -6,62 +6,49 @@
 
 # @lc code=start
 class Solution:
-	def isInterleave0(self, s1: str, s2: str, s3: str) -> bool:
-		'''
-		Caching-DFS-DP
-		'''
-		if s3 == s1 + s2: # case: empty string
-			return True
-		elif len(s3) != len(s1) + len(s2):
-			return False
-
-		DP = {(len(s1), len(s2)): True} # {(p1, p2): bool}
-
-		def dfs(p1, p2)->bool:
-			res = False
-			p3 = p1 + p2
-			# Match s1[p1]
-			if p1 < len(s1) and s1[p1] == s3[p3]:
-				if (p1 + 1, p2) not in DP:
-					DP[(p1 + 1, p2)] = dfs(p1 + 1, p2)
-				res = res or DP[(p1 + 1, p2)]
-			# Match s2[p2]
-			if p2 < len(s2) and s2[p2] == s3[p3]:
-				if (p1, p2 + 1) not in DP:
-					DP[(p1, p2 + 1)] = dfs(p1, p2 + 1)
-				res = res or DP[(p1, p2 + 1)]
-
-			DP[(p1, p2)] = res
-			return res
-
-		return dfs(0, 0)
-	
 	def isInterleave(self, s1: str, s2: str, s3: str) -> bool:
-		'''
-		2-DP
-		'''
-		if s3 == s1 + s2: # case: empty string
-			return True
-		elif len(s3) != len(s1) + len(s2):
+		# s1 for the weight, s2 for the height
+		lw, lh = len(s1), len(s2)
+		if(lw + lh != len(s3)):
 			return False
+		# DynamicProgramming list of size (lw + 1) * (lh + 1)
+		dp = [[False for _ in range(lw + 1)] for _ in range(lh + 1)]
+		dp[0][0] = True # True for begining 
+		# range 0, dp[0][.], 
+		for i in range(1, lw + 1): # start from 1
+			dp[0][i] = (dp[0][i - 1] and s1[i - 1] == s3[i - 1])
+		# column 0, dp[.][0]
+		for j in range(1, lh + 1):
+			dp[j][0] = (dp[j - 1][0] and s2[j - 1] == s3[j - 1])
+		
+		for i in range(1, lh + 1):
+			for j in range(1, lw + 1):
+				dp[i][j] = (dp[i][j-1] and s3[i+j-1] == s1[j-1]) \
+						or (dp[i-1][j] and s3[i+j-1] == s2[i-1])
+		
+		return dp[-1][-1]
 
-		# col_len: len(s1) + 1,		row_len: len(s2) + 1)
-		DP = [[False] * (len(s1) + 1) for _ in range(len(s2) + 1)]
+# Reference:
+# https://leetcode.cn/problems/interleaving-string/solution/dong-tai-gui-hua-zhu-xing-jie-shi-python3-by-zhu-3/
+# https://leetcode.cn/problems/interleaving-string/solution/lei-si-lu-jing-wen-ti-zhao-zhun-zhuang-tai-fang-ch/
 
-		for r in range(len(s2) + 1): # row, s2
-			for c in range(len(s1) + 1): # col, s1
-				if r + c == 0:
-					DP[r][c] = True # 0, 0
-					continue
-				i1, i2 = c - 1, r - 1 # current index of s1 and s2
-				cur = s3[i1 + i2 + 1] # current char in s3
-
-				# Spread from left to right between cols, try s1[j]
-				if c > 0 and DP[r][c - 1]:
-					DP[r][c] = DP[r][c] or (cur == s1[i1])
-				# Spread from up to down between rows, try s2[i]
-				if r > 0 and DP[r - 1][c]:
-					DP[r][c] = DP[r][c] or (cur == s2[i2])
-
-		return DP[-1][-1]
+# 大神的代码：较为简洁，不太容易理解
+class Solution:
+    def isInterleave(self, s1: str, s2: str, s3: str) -> bool:
+        len1=len(s1)
+        len2=len(s2)
+        len3=len(s3)
+        if(len1+len2!=len3):
+            return False
+        dp=[[False]*(len2+1) for i in range(len1+1)]
+        dp[0][0]=True
+        for i in range(1,len1+1):
+            dp[i][0]=(dp[i-1][0] and s1[i-1]==s3[i-1])
+        for i in range(1,len2+1):
+            dp[0][i]=(dp[0][i-1] and s2[i-1]==s3[i-1])
+        for i in range(1,len1+1):
+            for j in range(1,len2+1):
+                dp[i][j]=(dp[i][j-1] and s2[j-1]==s3[i+j-1]) or (dp[i-1][j] and s1[i-1]==s3[i+j-1])
+        return dp[-1][-1]
 # @lc code=end
+
