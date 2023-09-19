@@ -32,7 +32,7 @@ class Solution:
 				else:
 					r -= 1
 		
-		# transform from {(x,y,z)} to [[x,y,z]]
+		# Transform {(x,y,z)} to [[x,y,z]]
 		res = [list(x) for x in res] 
 
 		return res
@@ -55,12 +55,14 @@ class Solution:
 			l, r = i + 1, len(nums) -1 # don't look back
 			while l < r:
 				# skip duplicate in [l] or [r], then no duplicate will be in res
-				if l > i + 1 and nums[l] == nums[l - 1]:
+				while l < r and l > i + 1 and nums[l] == nums[l - 1]:
 					l += 1
-					continue
-				elif r < len(nums) - 1 and nums[r] == nums[r + 1]:
+					# continue
+				while l < r and r < len(nums) - 1 and nums[r] == nums[r + 1]:
 					r -= 1
-					continue
+					# continue
+				if l >= r:
+					break
 
 				if nums[l] + nums[r] == tar:
 					res.append([nums[i], nums[l], nums[r]])
@@ -70,6 +72,31 @@ class Solution:
 					l += 1
 				else:
 					r -= 1
-		
+
 		return res
+	
+	def threeSum2(self, nums: List[int]) -> List[List[int]]:
+		'''
+		Backtracking
+		'''
+		res = set() # Avoid Duplicate
+		def backtrack(i, cur):
+			if len(cur) == 3:
+				if sum(cur) == 0:
+					res.add(tuple(sorted(cur))) # Unique
+				else:
+					return
+			if i >= len(nums): # Out-of-Bounds
+				return
+
+			backtrack(i + 1, cur.copy()) # Ignore nums[i]
+			cur.append(nums[i])
+			backtrack(i + 1, cur.copy()) # Ignore nums[i]
+
+		backtrack(0, [])
+
+		res = [list(x) for x in res]
+
+		return res
+
 # @lc code=end

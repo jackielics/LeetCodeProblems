@@ -6,6 +6,9 @@
 # @lc code=start
 class Solution:
 	def maxSubArray(self, nums: List[int]) -> int:
+		'''
+		1-Dynamic Programming
+		'''
 		if len(nums) == 1:
 			return sum(nums)
 		

@@ -7,12 +7,14 @@
 # @lc code=start
 class Solution:
 	def merge(self, intervals: List[List[int]]) -> List[List[int]]:
-		# 先根据区间的左边界排序
+		
+		# Sort by the left boundary of the interval
 		intervals.sort(key=lambda x: x[0])
-		res = [intervals[0]] # 1 <= intervals.length
+		res = []
 
-		for l, r in intervals[1:]:
-			if l <= res[-1][1]:
+		for l, r in intervals:
+			# res not empty & res[-1][0] <= l <= res[-1][1]
+			if res and l <= res[-1][1]: 
 				res[-1][1] = max(res[-1][1], r) # merge
 			else:
 				res.append([l, r]) # just append
