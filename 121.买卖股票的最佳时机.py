@@ -8,18 +8,18 @@
 class Solution:
 	def maxProfit0(self, prices: List[int]) -> int:
 		'''
-		My Solution: just loop
+		My Solution: just loop but similiar to DP
 		Time Complexity: O(n)
 		Space Complexity: O(1)
 		'''
 		res = 0
 		# 1 <= prices.length
-		minV = prices[0] # 前面的最小值
-		# 对于每个数，找之前小于他的值
-		for i in range(1, len(prices)):
-			profit = prices[i] - minV
-			minV = min(minV, prices[i])
-			res = max(res, profit)
+		minP = prices[0] # min price so far
+		# For each num, find previous less than it
+		for price in prices[1:]:
+			profit = price - minP
+			minP = min(minP, price) # update min Price so far
+			res = max(res, profit) # update max profit so far
 		return res
 	
 	def maxProfit1(self, prices: List[int]) -> int:
@@ -29,11 +29,11 @@ class Solution:
 		Space Complexity: O(n)
 		'''
 		dp = [0] * len(prices) # states info
-		minV = prices[0]
+		minP = prices[0]
 
 		for i in range(1, len(prices)):
-			minV = min(minV, prices[i])
-			dp[i] = max(dp[i - 1], prices[i] - minV)
+			minP = min(minP, prices[i])
+			dp[i] = max(dp[i - 1], prices[i] - minP)
 
 		return dp[-1]
 # @lc code=end

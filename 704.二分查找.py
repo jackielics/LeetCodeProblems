@@ -8,7 +8,7 @@
 class Solution:
 	def search0(self, nums: List[int], target: int) -> int:
 		'''
-		My Solution0: LIST.index()
+		My Solution0: take a shortcut: LIST.index()
 		Time Complexity: O(n)
 		'''
 		try:
@@ -18,13 +18,13 @@ class Solution:
 		
 	def search1(self, nums: List[int], target: int) -> int:
 		'''
-		My Solution1: Binary Search
+		My Solution1: Binary Search, tricky method to calc average
 		Time Complexity: O(logn)
 		'''
 		l, r = 0, len(nums) - 1 # n在 [1, 10000]之间
 		while l <= r:
-			m = (l + r) // 2 # 在其他语言中可能会溢出
-			m = l + (r - l) // 2 # 不可能溢出
+			# m = (l + r) // 2 # may-overflow
+			m = l + (r - l) // 2 # Tricky! Non-overflow
 			if nums[m] == target:
 				return m
 			elif nums[m] > target:

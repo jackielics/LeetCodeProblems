@@ -13,11 +13,12 @@
 class Solution:
 	def reverseList0(self, head: Optional[ListNode]) -> Optional[ListNode]:
 		'''
-		My Solution0: iterate
+		My Solution0: iterate using 3 pointers [prev, cur, next]
 		Time Complexity: O(n)
 		Space Complexity: O(1)
 		'''
-		if not head or not head.next: # 对于空or只有头结点的，返回自身
+		# For null or only head
+		if not head or not head.next: 
 			return head
 		prev, cur = head, head.next
 		prev.next = None
@@ -27,4 +28,20 @@ class Solution:
 			prev, cur = cur, nxt
 		return prev
 	
+	def reverseList(self, head: Optional[ListNode]) -> Optional[ListNode]:
+		# Recursion: Nested function
+		def recurse(cur, prev):
+			# reverse cur and prev
+			if not cur:
+				return prev
+			nxt = cur.next
+			cur.next = prev
+			return recurse(nxt, cur) # Key Point!
+		
+		return recurse(head, None)
+	
+	def reverseList(self, head: Optional[ListNode]) -> Optional[ListNode]:
+		
+	
+
 # @lc code=end

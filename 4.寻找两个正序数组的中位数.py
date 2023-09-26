@@ -8,75 +8,109 @@
 class Solution:
 	def findMedianSortedArrays0(self, nums1: List[int], nums2: List[int]) -> float:
 		'''
-		My Solution: merge two sorted arrays and find the median
-		Time Complexity: O(m+n)
+		My Solution: brute-force merge two sorted arrays and find the median
+		Time Complexity: O((m+n)*log(m+n))
 		Space Complexity: O(m+n)
 		'''
 		nums1 += nums2 
-		nums1.sort()
-		med = (nums1[math.floor((len(nums1) - 1)/2)] + nums1[math.ceil((len(nums1) - 1)/2)]) / 2
+		nums1.sort() # O((m+n)*log(m+n))
+		med = (nums1[(len(nums1) - 1)//2] + nums1[len(nums1)//2]) / 2
 		return med
+	
+	def findMedianSortedArrays1(self, nums1: List[int], nums2: List[int]) -> float:
+		'''
+		Left ascending sorted list and Right descending sorted list 
+		Time Complexity: O(m+n)
+		Space Complexity: O(m+n)
+		'''
+		# asc(p) & des(q) pointer of nums1 & nums2
+		p1 = p2 = 0 
+		q1, q2 = len(nums1) - 1, len(nums2) - 1
+
+		total_len =  len(nums1) + len(nums2)
+		# Index of left & right operator of median: (n-1)//2, n//2
+		left_index, right_index = (total_len - 1) // 2, (total_len) // 2 
+		
+		if not (nums1 and nums2):
+			nums = nums1 + nums2
+			return (nums[left_index] + nums[right_index]) / 2
+		
+		total_asc, total_des = [], []
+
+
+		while len(total_asc) - 1 < left_index and p1 < len(nums1) and p2 < len(nums2):
+			if nums1[p1] <= nums2[p2]: # move the smaller
+				total_asc.append(nums1[p1])
+				p1 += 1
+			else:
+				total_asc.append(nums2[p2])
+				p2 += 1
+		# run out of nums1 before median
+		while p1 >= len(nums1) and len(total_asc) - 1 < left_index:
+			total_asc.append(nums2[p2])
+			p2 += 1 # move p2 & pm meanwhile
+		# run out of nums2 before median
+		while p2 >= len(nums2) and len(total_asc) - 1 < left_index:
+			total_asc.append(nums1[p1])
+			p1 += 1 # move p1 & pm meanwhile
+
+
+		while len(total_des) < total_len - right_index and q1 > -1 and q2 > -1:
+			if nums1[q1] >= nums2[q2]: # move the greater
+				total_des.append(nums1[q1])
+				q1 -= 1
+			else:
+				total_des.append(nums2[q2])
+				q2 -= 1
+		# run out of nums1 before median
+		while q1 < 0 and len(total_des) < total_len - right_index:
+			total_des.append(nums2[q2])
+			q2 -= 1 # move p2 & pm meanwhile
+		# run out of nums2 before median
+		while q2 < 0 and len(total_des) < total_len - right_index:
+			total_des.append(nums1[q1])
+			q1 -= 1 # move p1 & pm meanwhile
+
+		return (total_asc[-1] + total_des[-1]) / 2
 	
 	def findMedianSortedArrays(self, nums1: List[int], nums2: List[int]) -> float:
 		'''
+		binary search in left and right partition
+		Time Complexity: O(m+n)
+		Space Complexity: O(1)
 		'''
+		# nums1 cannot be longer than nums2, or (m2 := med - (m1:=(l + r) // 2) - 1) will < 0
+		if len(nums1) > len(nums2):
+			nums1, nums2 = nums2, nums1
+
 		total_len = len(nums1) + len(nums2)
-		left_len = total_len // 2
+		med = (total_len - 1) // 2 # Index of (left) median
+		# Left Partition: [0, m1] + [0, m2]
 
-		# 判断特殊情况
-		import numpy as np
-		if (not nums1 or not nums2) or nums1[-1] <= nums2[0]: # nums1在前，nums2在后
-			med = np.median(nums1 + nums2)
-			return med
-		elif nums1[0] >= nums2[-1]: # nums1在后，nums2在前
-			med = np.median(nums2 + nums1)
-			return med
-
+		#  Initial pointer for `nums1`
 		l, r = 0, len(nums1) - 1
-		m = (l + r) // 2
-		while l <= r:
-			m2 = left_len - m - 2 # left_len = (m+1)+(m2+1)
-			if m2 < 0: # nums2中没有用到的元素
-				m = left_len - 1
-				break
-			if nums1[m] <= nums2[m2 + 1]: # num1满足条件
-				if nums2[m2] <= nums1[m + 1]:
-					break # 满足条件，划分结束
+
+		while True:
+			m1 = (l + r) // 2 # current mid in nums1
+			# Equation: m1 + 1 + m2 + 1 == med + 1
+			m2 = med - m1 - 1 # > 0 because nums1 is shorter
+			# Assume -inf is on left of [0], +inf is on right of [-1]
+			left1 = nums1[m1] if m1 > -1 else float('-inf')
+			right1 = nums1[m1 + 1] if m1 < len(nums1) - 1 else float('inf')
+
+			left2 = nums2[m2] if m2 > -1 else float('-inf')
+			right2 = nums2[m2 + 1] if m2 < len(nums2) - 1 else float('inf')
+
+			# partition just right
+			if left1 <= right2 and left2 <= right1 :
+				if total_len % 2:
+					return max(left1, left2)
 				else:
-					l = m + 1 # 增大m
-			else: # num1不满足条件
-					r = m - 1 # 减小m
-			m = (l + r) // 2 # 下标
-			
-
-		# l > r跳出循环的 ,对num1的l、r进行判断
-		if r < 0: # nums1未取的
-			m2 = left_len - 1
-			# m = -1 # 表示不计
-		elif l > len(nums1) - 1: # nums1全取的
-			m2 = left_len - len(nums1) - 1
-		else: # break跳出while循环的
-			pass
-
-		# 计算中位数右边的操作数
-		if m >= -1 and m2 >= -1:
-			right_operand = min(nums1[m + 1], nums2[m2 + 1])
-		elif m >= -1:
-			right_operand = nums1[m + 1]
-		elif m2 >= -1:
-			right_operand = nums2[m2 + 1]
-
-		# 计算中位数左边的操作数
-		if total_len % 2 == 0:
-			if m >= 0 and m2 >= 0:
-				left_operand = max(nums1[m], nums2[m2])
-			elif m >= 0:
-				left_operand = nums1[m]
-			elif m2 >= 0:
-				left_operand = nums2[m2]
-			med = (left_operand + right_operand) / 2
-		else:
-			med = right_operand
-
-		return med
+					return (max(left1, left2) + min(right1, right2)) / 2
+			# Left partition too great -> Decrease Left
+			elif left1 > right2:
+				r = m1 - 1 
+			# Right partition too great -> Increase Left
+			else:
+				l = m1 + 1
 # @lc code=end
