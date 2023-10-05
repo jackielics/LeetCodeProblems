@@ -24,25 +24,22 @@ class Solution:
 				continue # stay the same
 			else:
 				cnt = 1
-			if cnt > ml:
-				ml = cnt
+			ml = max(ml, cnt)
 		return ml
 	
-	def longestConsecutive1(self, nums: List[int]) -> int:
+	def longestConsecutive(self, nums: List[int]) -> int:
 		'''
-		Master's Solution: use Set
+		Master's Solution: use Set and find only the start of consecutive
+		Time Complexity: O(n)
+		Space Complexity: O(n)
 		'''
-		if not nums:
-			return 0
 		num_set = set(nums) # remove duplicates
-		ml = 1
+		ml = 0 # max length
 		for v in num_set:
-			# find start of a sequence
-			if v-1 not in num_set: 
-				p = v # pointer
+			# only find start of a sequence
+			if v - 1 not in num_set:
 				cnt = 1
-				while p+1 in num_set:
-					p += 1
+				while (v + cnt) in num_set:
 					cnt += 1
 				ml = max(ml, cnt)
 		return ml

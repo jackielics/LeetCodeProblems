@@ -8,19 +8,24 @@
 class Solution:
 	def isPalindrome0(self, s: str) -> bool:
 		'''
-		My Solution0: 0. filter out non-alphanumeric characters 2. compare with reversed string
+		My Solution0: 
+		1. filter out non-alphanumeric characters 
+		2. compare with reversed string
 		'''
 		sf = ''.join(filter(str.isalnum, s.lower()))
 		return sf == sf[::-1]
 
-	def isPalindrome1(self, s: str) -> bool:
+	def isPalindrome(self, s: str) -> bool:
 		'''
-		My Solution1: two pointers
+		My Solution1: Two pointers
 		'''
-		sf = ''.join(filter(str.isalnum, s.lower()))
-		l, r = 0, len(sf) - 1
+		l, r = 0, len(s) - 1
 		while l < r:
-			if sf[l] != sf[r]:
+			while l < r and not s[l].isalnum():
+				l += 1
+			while l < r and not s[r].isalnum():
+				r -= 1
+			if s[l].lower() != s[r].lower():
 				return False
 			l += 1
 			r -= 1

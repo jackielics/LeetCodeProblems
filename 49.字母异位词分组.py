@@ -6,12 +6,12 @@
 
 # @lc code=start
 class Solution:
-	'''
-	My Solution:
-	5.06 %, 19.14 %
-	Time: O(m*nlogn)
-	'''
 	def groupAnagrams0(self, strs: List[str]) -> List[List[str]]:
+		'''
+		My 	Solution: List and Sort
+		5.06 %, 19.14 %
+		Time: O(m*nlogn)
+		'''
 		res = []
 		ana_sort = []
 		for v in strs:
@@ -23,10 +23,10 @@ class Solution:
 				res[idx].append(v)
 		return res
 
-	'''
-	My Solution: use Counter Time Limit Exceeded
-	'''
 	def groupAnagrams1(self, strs: List[str]) -> List[List[str]]:
+		'''
+		My Solution: use Counter Time Limit Exceeded
+		'''
 		res = []
 		anas = []
 		for v in strs:
@@ -39,12 +39,11 @@ class Solution:
 				res[idx].append(v)
 		return res
 	
-	'''
-	Master Solution: HashMap
-	20.66 %, 5.05 % 
-	'''
 	def groupAnagrams2(self, strs: List[str]) -> List[List[str]]:
-		res = defaultdict(list) # 访问不存在的key时，返回一个空list
+		'''
+		Master Solution: defaultdict & HashMap [0] * 26
+		'''
+		res = defaultdict(list) # collections.defaultdict(list)
 		for v in strs:
 			cnt = [0] * 26
 			for c in v:

@@ -8,15 +8,15 @@
 class Solution:
 	def twoSum(self, numbers: List[int], target: int) -> List[int]:
 		'''
-		My Solution:前后双指针法,不知道会不会错过正确答案
+		My Solution: Front and rear Two pointers
 		Time Complexity:O(n)
 		Space Complexity:O(1)
 		'''
 		l, r = 0, len(numbers) - 1
 		while l < r:
-			if numbers[l] + numbers[r] == target:
+			if (sumValue := numbers[l] + numbers[r]) == target:
 				return [l + 1, r + 1] # return position
-			elif numbers[l] + numbers[r] < target:
+			elif sumValue < target:
 				l += 1
 			else:
 				r -= 1

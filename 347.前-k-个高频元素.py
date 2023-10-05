@@ -8,7 +8,7 @@
 class Solution:
 	def topKFrequent0(self, nums: List[int], k: int) -> List[int]:
 		'''
-		My Solution: use Counter in Python
+		My Solution: use Counter(nums).most_common(k) in Python
 		Time Complexity: O(nlogn)
 		Space Complexity: O(n)
 		'''
@@ -16,7 +16,7 @@ class Solution:
 
 	def topKFrequent1(self, nums: List[int], k: int) -> List[int]:
 		'''
-		My Solution: use hash
+		My Solution: use hash and sort
 		Time Complexity: O(nlogn)
 		Space Complexity: O(n)
 		'''
@@ -26,19 +26,25 @@ class Solution:
 		l = sorted(count.items(), key = lambda x : x[1], reverse = True)
 		return [i[0] for i in l[:k]]
 		
-	def topKFrequent(self, nums: List[int], k: int) -> List[int]:
+	def topKFrequent2(self, nums: List[int], k: int) -> List[int]:
 		'''
-		Master's Solution: use LIST to store the frequency and avoid sorting
+		Master's Solution: use a list which index is frequncy to record frequency and avoid sort
 		Time Complexity: O(n)
 		Space Complexity: O(n)
 		'''
-		count = {}
-		freq = [[] for _ in range(len(nums) + 1)] # [] * n is wrong
-		res = []
+		count = defaultdict(int) # {key: cnt} default=0
+		max_freq = 1
 		for i in nums:
-			count[i] = count.get(i, 0) + 1
-		for key, value in count.items():
-			freq[value].append(key)
+			count[i] += 1
+			# update `max_freq`
+			max_freq = max(count[i], max_freq)
+
+		# All possible frequency [1, max_freq]: freq[index=freq] = key
+		freq = [[] for _ in range(max_freq + 1)] # Not * !
+		res = []
+
+		for word, cnt in count.items(): # Iter dict
+			freq[cnt].append(word)
 		for i in range(len(freq) - 1, 0, -1): # backwards
 				res += freq[i]
 				if k == len(res):

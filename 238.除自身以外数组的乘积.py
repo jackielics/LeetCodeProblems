@@ -8,7 +8,7 @@
 class Solution:
 	def productExceptSelf0(self, nums: List[int]) -> List[int]:
 		'''
-		My Solution1: Brute Force, 18/22 cases passed (N/A)
+		My Solution1: Brute Force, 18/22 cases passed
 		Time Complexity: O(n^2)
 		Space Complexity: O(1)
 		'''
@@ -30,12 +30,11 @@ class Solution:
 		Space Complexity: O(n)
 		'''
 		prod_for = [nums[0]] * len(nums) # 2 <= nums.length
-		for i in range(1 ,len(nums), 1): # forwards
+		for i in range(1, len(nums), 1): # forwards
 			if prod_for[i - 1] == 0: # all 0 forwards
 				prod_for[i:] = [0] * (len(nums) - i)
 				break
 			prod_for[i] = prod_for[i - 1] * nums[i]
-
 
 		prod_back = [nums[-1]] * len(nums) # 2 <= nums.length
 		for i in range(len(nums) - 2, -1, -1): # backwards
@@ -43,7 +42,7 @@ class Solution:
 				prod_back[:i + 1] = [0] * (1 + i)
 				break
 			prod_back[i] = prod_back[i + 1] * nums[i]
-		
+
 		res = []
 		for i in range(len(nums)):
 			if i ==0 :
@@ -61,23 +60,30 @@ class Solution:
 		Time Complexity: O(n)
 		Space Complexity: O(1)
 		'''
-		res = [1] * len(nums) # default 1
-
-		prod = 1
-		for i in range(0 ,len(nums) - 1, 1): # [0, len(nums) - 2]
-			if prod == 0: # all 0 forwards
-				res[i + 1:] = [0] * (len(nums) - i - 1)
+		res = [] # forwards product
+		for i in range(len(nums)): # forwards
+			if nums[i] == 0: # cur == 0
+				res.extend([0] * (len(nums) - i))
 				break
-			prod *= nums[i]
-			res[i + 1] *= prod
+			elif not res: # empty
+				res.append(nums[i])
+			else:
+				res.append(res[-1] * nums[i])
 
-		prod = 1
-		for i in range(len(nums) - 1, 0, -1): # [1, len(nums) - 1, -1]
-			if prod == 0: # all 0 backwards
-				res[:i + 1] = [0] * (1 + i)
+		prod = 1 # product from backwards
+		for i in range(len(nums) - 1, -1, -1): # [1, len(nums) - 1, -1]
+			if prod == 0: # cur == 0
+				res[:i + 1] = [0] * (i + 1)
 				break
-			prod *= nums[i]
-			res[i - 1] *= prod
-				
+			elif i == 0: # at head
+				prod *= nums[i + 1]
+				res[i] = prod
+			elif i == len(nums) - 1: # at tail
+				res[i] = res[i - 1]
+			else:
+				prod *= nums[i + 1]
+				# res[i] = res[i + 1] * nums[i + 1]
+				res[i] = prod * res[i - 1]
+
 		return res
 # @lc code=end
