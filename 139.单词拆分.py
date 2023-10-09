@@ -8,15 +8,15 @@
 class Solution:
 	def wordBreak(self, s: str, wordDict: List[str]) -> bool:
 		'''
-		DP
+		1-DP
 		'''
-		dp = [False] * (len(s) + 1) # if current matches?
-		dp[0] = True # initial stutas
+		dp = [False] * (len(s) + 1) # if current matches
+		dp[0] = True # initial stutas: '' always match
 		for i in range(1, len(s) + 1): # start from 1 to len(s)
-			for w in wordDict:
-				if len(w) <= i: # compare length
-					dp[i] = dp[i - len(w)] and s[i - len(w) : i] == w
-				if dp[i]: # matched
+			for word in wordDict:
+				if len(word) <= i: # compare length
+					dp[i] = dp[i - len(word)] and s[i - len(word) : i] == word
+				if dp[i]: # Once matched, Break
 					break
-		return dp[-1]
+		return dp[-1] # if all string can match
 # @lc code=end

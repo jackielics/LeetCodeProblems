@@ -13,11 +13,11 @@
 #		 self.right = right
 class Solution:
 	def isSubtree(self, 
-	       root: Optional[TreeNode], 
-		   subRoot: Optional[TreeNode],
-		   adjacent:bool = False) -> bool:
+			root: Optional[TreeNode], 
+			subRoot: Optional[TreeNode],
+			started:bool = False) -> bool:
 		'''
-		adjacenct is adjacency required?
+		started: has started or not?
 		My Solution 0: Recursion
 		Time Complexity: O(n^2)
 		Space Complexity: O(n)
@@ -27,7 +27,6 @@ class Solution:
 			return True
 		elif not root or not subRoot:
 			return False
-		
 		
 		equal = True
 		if root.val == subRoot.val: # root matches
@@ -41,8 +40,8 @@ class Solution:
 		else:
 				equal = False
 
-		# inequal and adjacent
-		if not equal and adjacent:
+		# inequal but already started
+		if not equal and started:
 			return False
 
 		# left Subtree or right Subtree matches

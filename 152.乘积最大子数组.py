@@ -8,15 +8,16 @@
 class Solution:
 	def maxProduct(self, nums: List[int]) -> int:
 		'''
-		nums[i] is int, use resMax to record the max product dynamically
+		ecord the max and min product meanwhile dynamically
 		'''
-		resMax = float('-inf') # max product
+		res = float('-inf') # max product
 		curMax = curMin = 1 # max/min product in the current string
 
-		for v in nums:
+		for num in nums:
 			# right expression will be calculated before left
-			curMax, curMin = max(curMin * v, curMax * v, v), min(curMin * v, curMax * v, v)
-			resMax = max(resMax, curMax) # update max product
-		
-		return resMax
+			products = (curMin * num, curMax * num, num)
+			curMax, curMin = max(products), min(products)
+			res = max(res, curMax) # update max product
+
+		return res
 # @lc code=end

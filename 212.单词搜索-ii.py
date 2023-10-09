@@ -13,11 +13,10 @@ class Node:
 
 class Solution:
 	'''
-	iterate + DFS
-	1 <= m, n <= 12, 1 <= words.length <= 3 * 104
+	Trie + DFS + Prune
 	'''
 	def build_trie(self, words):
-		# Build a trie from words list
+		'''Build a trie from words list'''
 		root = Node() # Root Node
 		for word in words:
 			cur = root # Current Node
@@ -32,12 +31,14 @@ class Solution:
 	
 	def findWords(self, board: List[List[str]], words: List[str]) -> List[str]:
 		ROWS, COLS = len(board), len(board[0]) # len of rows and cols
-		visited = set() # already visited
+		visited_set = set() # Already visited
 		res = []
+		# build trie from words
 		root = self.build_trie(words)
 		
 		def prune(cur, chars):
-			# prune node along chars that have only one node
+			'''Delete duplicated single path of nodes'''
+			# prune node along chars that have only one node?
 			for c in chars[::-1]:
 				if not cur.kids:
 					cur = cur.par # move upward
@@ -45,48 +46,44 @@ class Solution:
 				else:
 					break
 
-
 		def dfs(i, j, cur, chars):
 			'''
 			DFS start from board[i][j]
 			i	: row index
 			j	: col index
-			cur	: current Node
+			cur	: current Node in Trie
 			chars: current string
 			'''
-			# ch = board[i][j] # cur char 
+			# char = board[i][j] # cur char in board
 			if (not -1 < i < ROWS or 
-       			not -1 < j < COLS or 
-				(i, j) in visited or 
-				(ch := board[i][j]) not in cur.kids):
+				not -1 < j < COLS or 
+				(i, j) in visited_set or 
+				(char := board[i][j]) not in cur.kids):
 				# repeat || out-of-bound || don't match
 				return 
-			# if board[i][j] in cur.kids:
-			visited.add((i, j)) # add to visited
-			
-			chars = chars + ch
+			# Add to visited set if board[i][j] in cur.kids:
+			visited_set.add((i, j))
+			chars += char
 
-			if (cur := cur.kids[ch]).end: # reach end && move 
+			# if reach an end after moving cur 
+			if (cur := cur.kids[char]).end:
 				res.append(chars) # Return Sentence
 				cur.end = False # Avoid Duplicate
-				
-				# TODO: HOW to prune？
-				# if len(cur.kids) == 0:
-				prune(cur, chars)
+				# Delete duplicated single path of nodes
+				prune(cur, chars) # faster greatly
 
-			
 			# search adjacent to match next char
 			dfs(i + 1, j, cur, chars)
 			dfs(i, j + 1, cur, chars)
 			dfs(i - 1, j, cur, chars)
 			dfs(i, j - 1, cur, chars)
 			
-			visited.remove((i, j)) # delete after recursion finished
+			visited_set.remove((i, j)) # delete after recursion finished
 
 		for i in range(ROWS):
 			for j in range(COLS):
-				dfs(i, j, root, '')
+				dfs(i, j, root, str()) # start from empty string
 		
 		return res
-			
+
 # @lc code=end

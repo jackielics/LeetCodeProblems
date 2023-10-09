@@ -6,9 +6,24 @@
 
 # @lc code=start
 class Solution:
-	def longestPalindrome(self, s: str) -> str:
+	# Refer to: 647. Palindromic Substrings
+	def longestPalindrome0(self, s: str) -> str:
+		'''Iteration'''
+		res = "" # current longest Palindrome
+
+		for mid in range(len(s)): # mid point
+			# left and right boundary of Palindrome
+			for l, r in ((mid, mid), (mid, mid + 1)): # odd or even length
+				while -1 < l <= r < len(s) and s[l] == s[r]:
+					if (r - l + 1) > len(res): # new longest
+						res = s[l : r + 1] # copy
+					l -= 1
+					r += 1
+		return res
+
+	def longestPalindrome1(self, s: str) -> str:
 		'''
-        Brute-Force
+        Brute-Force way: depreciated
 		'''
 		def findPalin(i:int)->dict:
 			# i: index, check odd(1) and even(2) meanwhile
@@ -51,7 +66,4 @@ class Solution:
 				l, r = dic['l'], dic['r']
 		
 		return s[l : r + 1]
-
-
-
 # @lc code=end

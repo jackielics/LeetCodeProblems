@@ -12,7 +12,7 @@
 #         self.left = left
 #         self.right = right
 class Solution:
-	def invertTree(self, root: Optional[TreeNode]) -> Optional[TreeNode]:
+	def invertTree0(self, root: Optional[TreeNode]) -> Optional[TreeNode]:
 		'''
         My Solution 0: Recursion
 		Time Complexity: O(n)
@@ -21,7 +21,7 @@ class Solution:
 		# recurison exit
 		if not root:
 			return None
-		# recursion body
+		# recursion body: swap left and right tree
 		left, right = root.left, root.right # store it first
 		
 		root.left = self.invertTree(right)
@@ -29,6 +29,20 @@ class Solution:
 
 		return root 
 	
+	def invertTree(self, root: Optional[TreeNode]) -> Optional[TreeNode]:
+		'''
+        My Solution 1: Recursion
+		Time Complexity: O(n)
+		Space Complexity: O(n)
+		'''
+		# recurison exit
+		if not root:
+			return None
+		# recursion body: swap left and right tree
+		root.right, root.left = root.left, root.right # store it first
 
-	
+		self.invertTree(root.left)
+		self.invertTree(root.right)
+
+		return root 
 # @lc code=end

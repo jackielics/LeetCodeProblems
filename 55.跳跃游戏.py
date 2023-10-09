@@ -13,15 +13,15 @@ class Solution:
 		cur = 0 # Current Position (Initial)
 		far = 0 # Farthest Pos Achievable
 
+		# Traverse every index to get the Farthest distance
 		while far < len(nums) - 1 and cur <= far:
-			far = max(far, cur + nums[cur]) 
+			far = max(far, cur + nums[cur]) # Greedy
 			cur += 1
 
 		if far >= len(nums) - 1:
 			return True
 		else:
 			return False
-
 
 	def canJump1(self, nums: List[int]) -> bool:
 		'''
@@ -33,11 +33,9 @@ class Solution:
 			# [i] reachable => [i-1] reachable
 			if i + nums[i] >= Goal:
 				Goal = i
-		
 		if Goal == 0: # Starting Point
 			return True
 		else:
 			return False
-
 
 # @lc code=end

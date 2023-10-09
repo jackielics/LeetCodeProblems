@@ -11,7 +11,7 @@ class Solution:
 		2-DP
 		'''
 		DP = [[0] * n for _ in range(m)] # DP matrix
-		DP[0][0] = 1 # initial status
+		DP[0][0] = 1 # initial status: 1 way
 
 		for i in range(m): # rows
 			for j in range(n): # cols
@@ -19,7 +19,7 @@ class Solution:
 					DP[i][j] += DP[i - 1][j]
 				if j > 0:
 					DP[i][j] += DP[i][j - 1]
-					
+
 		return DP[-1][-1]
 
 # @lc code=end

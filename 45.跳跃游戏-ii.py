@@ -8,6 +8,24 @@
 class Solution:
 	def jump0(self, nums: List[int]) -> int:
 		'''
+		Greedy Range Pointer
+		'''
+		res = 0 # Steps to Reach [-1]
+		l = r = 0 # Left and Right Bound of A Continuous Range
+		res = 0 # Min Steps Reaching Cur Pos
+
+		while r < len(nums) - 1: # While Didn't Reach End
+			far = 0 # Farthest Pos Reachable From [l, r]
+			for i in range(l, r + 1): # [l, r]
+				far = max(far, i + nums[i])
+			l = r + 1
+			r = far # update r to the farthest
+			res += 1
+
+		return res
+
+	def jump1(self, nums: List[int]) -> int:
+		'''
 		1-DP
 		'''
 		cur = 0 # Current Position (Initial)
@@ -23,22 +41,4 @@ class Solution:
 
 		return DP[-1]
 
-	def jump1(self, nums: List[int]) -> int:
-		'''
-		Greedy Range Pointer
-		'''
-		cur = 0 # Current Position (Initial)
-		res = 0 # Steps to Reach [-1]
-		l = r = 0 # Left and Right Bound of A Continuous Range
-		res = 0 # Min Steps Reaching Cur Pos
-
-		while r < len(nums) - 1: # While Didn't Reach [-1]
-			far = 0 # Farthest Pos Reachable From [l, r]
-			for i in range(l, r + 1): # [l, r]
-				far = max(far, i + nums[i])
-			l = r + 1
-			r = far
-			res += 1
-
-		return res
 # @lc code=end

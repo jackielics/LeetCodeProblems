@@ -40,8 +40,5 @@ class Solution:
 		
 		return recurse(head, None)
 	
-	def reverseList(self, head: Optional[ListNode]) -> Optional[ListNode]:
-		
-	
 
 # @lc code=end

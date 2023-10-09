@@ -12,7 +12,7 @@
 #         self.left = left
 #         self.right = right
 class Solution:
-	def maxDepth(self, root: Optional[TreeNode]) -> int:
+	def maxDepth0(self, root: Optional[TreeNode]) -> int:
 		'''
         My Solution 0: Recursion
 		Time Complexity: O(n)
@@ -25,4 +25,18 @@ class Solution:
 		# Recursion body
 		return 1 + max(self.maxDepth(root.left), self.maxDepth(root.right))
 
+	def maxDepth1(self, root: Optional[TreeNode]) -> int:
+		'''Iterative way'''
+		stack = [(root, 1)] # [(node, depth)]
+		res = 0
+
+		while stack:
+			cur, dep = stack.pop()
+			if cur:
+				# append left and right subtree with depth
+				stack.append((cur.left, dep + 1))
+				stack.append((cur.right, dep + 1))
+				res = max(res, dep) # update max depth
+
+		return res
 # @lc code=end

@@ -15,7 +15,7 @@ class Solution:
 			return max(nums)
 		
 		pp1, p1 = pp2, p2 = 0, 0
-		for v1, v2 in zip(nums[1:], nums[:-1]): # ignore first
+		for v1, v2 in zip(nums[1:], nums[:-1]): # ignore first or last
 			cur1, cur2 = max(p1, pp1 + v1), max(p2, pp2 + v2)
 			pp1, pp2 = p1, p2
 			p1, p2 = cur1, cur2

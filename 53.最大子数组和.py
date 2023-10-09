@@ -7,16 +7,13 @@
 class Solution:
 	def maxSubArray(self, nums: List[int]) -> int:
 		'''
-		1-Dynamic Programming
+		1-Dynamic Programming or Greedy
 		'''
-		if len(nums) == 1:
-			return sum(nums)
-		
 		PreSum = 0
 		res = max(nums)
 		for v in nums:
-			# If < 0 then reset to Zero
-			PreSum = max(PreSum, 0) 
+			# Greedy: If < 0 then reset to Zero
+			PreSum = max(PreSum, 0)
 			PreSum += v
 			res = max(res, PreSum)
 		return res

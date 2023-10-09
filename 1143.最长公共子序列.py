@@ -6,23 +6,22 @@
 
 # @lc code=start
 class Solution:
-	def longestCommonSubsequence1(self, text1: str, text2: str) -> int:
+	def longestCommonSubsequence(self, text1: str, text2: str) -> int:
 		'''
 		2-DP 
 		'''
 		# DP Matrix (len(text2) + 1) * (len(text1) + 1)
 		DP = [[0] * (len(text1) + 1) for _ in range(len(text2) + 1)]
 
-		# Bottom-Up Dynamic Programming
-		for i in range(len(text2) - 1, -1, -1): # Row 
-			for j in range(len(text1) - 1, -1, -1): # Col 
-				# deliver
-				DP[i][j] = max(max(DP[i + 1][j], DP[i][j + 1]), 
-								DP[i + 1][j + 1] + (text2[i] == text1[j]))
-		return DP[0][0]
+		# Dynamic Programming
+		for i in range(1, 1 + len(text2)): # Row 
+			for j in range(1, 1 + len(text1)): # Col 
+				# Just Deliver or Try to Compare
+				DP[i][j] = max(max(DP[i - 1][j], DP[i][j - 1]), 
+								DP[i - 1][j - 1] + (text2[i - 1] == text1[j - 1]))
+		return DP[-1][-1]
 
-
-	def longestCommonSubsequence2(self, text1: str, text2: str) -> int:
+	def longestCommonSubsequence1(self, text1: str, text2: str) -> int:
 		'''
 		Recurse
 		'''
