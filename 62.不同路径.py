@@ -7,17 +7,15 @@
 # @lc code=start
 class Solution:
 	def uniquePaths(self, m: int, n: int) -> int:
-		'''
-		2-DP
-		'''
+		'''2-DP'''
 		DP = [[0] * n for _ in range(m)] # DP matrix
 		DP[0][0] = 1 # initial status: 1 way
 
 		for i in range(m): # rows
 			for j in range(n): # cols
-				if i > 0:
+				if i > 0: # inherit from above
 					DP[i][j] += DP[i - 1][j]
-				if j > 0:
+				if j > 0: # inherit from left
 					DP[i][j] += DP[i][j - 1]
 
 		return DP[-1][-1]

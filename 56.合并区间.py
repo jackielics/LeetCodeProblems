@@ -15,8 +15,9 @@ class Solution:
 		for l, r in intervals:
 			# res not empty & res[-1][0] <= l <= res[-1][1]
 			if res and l <= res[-1][1]: 
-				res[-1][1] = max(res[-1][1], r) # merge
-			else:
+				# merge and update right of `res[-1]`
+				res[-1][1] = max(res[-1][1], r) 
+			else: # Other Situations: empty or non-overlapping
 				res.append([l, r]) # just append
 		return res
 # @lc code=end

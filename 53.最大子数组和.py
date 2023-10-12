@@ -6,15 +6,13 @@
 # @lc code=start
 class Solution:
 	def maxSubArray(self, nums: List[int]) -> int:
-		'''
-		1-Dynamic Programming or Greedy
-		'''
+		'''1-Dynamic Programming(Greedy)'''
 		PreSum = 0
-		res = max(nums)
-		for v in nums:
+		res = max(nums) # Initial
+		for num in nums:
 			# Greedy: If < 0 then reset to Zero
 			PreSum = max(PreSum, 0)
-			PreSum += v
+			PreSum += num
 			res = max(res, PreSum)
 		return res
 # @lc code=end

@@ -7,9 +7,7 @@
 # @lc code=start
 class Solution:
 	def wordBreak(self, s: str, wordDict: List[str]) -> bool:
-		'''
-		1-DP
-		'''
+		'''1-DP'''
 		dp = [False] * (len(s) + 1) # if current matches
 		dp[0] = True # initial stutas: '' always match
 		for i in range(1, len(s) + 1): # start from 1 to len(s)

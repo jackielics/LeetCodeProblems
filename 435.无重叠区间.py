@@ -9,15 +9,16 @@ class Solution:
 	def eraseOverlapIntervals(self, intervals: List[List[int]]) -> int:
 		# Erase the Longest Interval
 		intervals.sort()
-		st = float('-inf') # Start from -inf
+		end = float('-inf') # End of last kept interval, start from -inf
 		res = 0
 
 		for l, r in intervals:
-			if l >= st: # Non-Overlapping
-				st = r # Update 'st' to 'r'
+			if l >= end: # Non-Overlapping
+				end = r # Update 'st' to 'r'
 			else: # Overlapping
 				res += 1
-				st = min(st, r) # Update 'st' to Smaller One
+				# Keep the shorter interval, remove the longer interval
+				end = min(end, r) # Update 'st' to Smaller One
 
 		return res
 # @lc code=end
