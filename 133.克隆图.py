@@ -18,16 +18,19 @@ class Solution:
 		'''
 		DFS Cloning
 		'''
-		nodeToCopy = {} # {OldNode: NewNode}
+		nodeToCopy = {} # Mapping: {OldNode: NewNode}
 
-		def dfs(node):
-			if node in nodeToCopy:
-				return nodeToCopy[node]
-			
-			newNode = Node(node.val) # Reference
-			nodeToCopy[node] = newNode
-			for nd in node.neighbors:
+		def dfs(orgNode):
+			# Recursion Exit
+			if orgNode in nodeToCopy: # Mapped Before
+				return nodeToCopy[orgNode]
+
+			# Recursion Body
+			newNode = Node(orgNode.val) # Copy
+			nodeToCopy[orgNode] = newNode # Mapping
+			for nd in orgNode.neighbors: # Connect
 				newNode.neighbors.append(dfs(nd))
+			
 			return newNode
 		
 		return dfs(node) if node else None
