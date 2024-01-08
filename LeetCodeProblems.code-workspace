@@ -1,12 +1,7 @@
 {
 	"folders": [
 		{
-			"name": "LeetCodeProblems",
 			"path": "."
-		},
-		{
-			"name": "LeetCode_In_VS",
-			"path": "../../Codes/LeetCode_In_VS"
 		}
 	],
 	"settings": {}
