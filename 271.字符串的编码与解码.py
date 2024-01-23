@@ -28,25 +28,21 @@ class Codec1:
 	def encode(self, strs: List[str]) -> str:
 		"""Encodes a list of strings to a single string.
 		"""	
-		if strs == []:
-			return "0->"
 		res = ''
 		for s in strs:
-			res += str(len(s))+'->'+s
+			res += f'{len(s)}->{s}'
 		return res
 
 	def decode(self, s: str) -> List[str]:
 		"""Decodes a single string to a list of strings.
 		"""
-		if s == "0->":
-			return ['']
-		i = 0
+		cur = 0
 		res = []
-		while i < len(s):
-			deli = s.index('->', i)
-			subLen = int(s[i : deli])
-			i = deli+2+subLen
-			res.append(s[deli+2 : i])
+		while cur < len(s):
+			deli = s.index('->', cur) # delimiter start from i
+			subLen = int(s[cur : deli])
+			cur = deli + 2 + subLen # Update i
+			res.append(s[deli + 2 : cur])
 		return res
 
 # Your Codec object will be instantiated and called as such:
