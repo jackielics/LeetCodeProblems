@@ -41,14 +41,19 @@ class Solution:
 	
 	def groupAnagrams2(self, strs: List[str]) -> List[List[str]]:
 		'''
-		Master Solution: defaultdict & HashMap [0] * 26
+		Master Solution: defaultdict & HashMap [0] * 26, {tuple: list},
+		use hashable TUPLE to replace unhashable SET
+		Time: O(mn)
+		Space: O(n)
 		'''
 		res = defaultdict(list) # collections.defaultdict(list)
 		for v in strs:
-			cnt = [0] * 26
-			for c in v:
+			cnt = [0] * 26 # stimulate unhashable SET
+			for c in v: # similar to SET
 				cnt[ord(c) - ord('a')] += 1
 			res[tuple(cnt)].append(v) # list cannot be key but tuple can
 		return list(res.values())
+			
+
 # @lc code=end
 
