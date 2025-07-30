@@ -14,22 +14,20 @@
 class Solution:
 	def hasCycle0(self, head: Optional[ListNode]) -> bool:
 		'''
-		My Solution: use a DICT to map NODE to index
+		My Solution: use SET
 		'''
-		if not head:
-			return False # no circle
-		node_dict = {}
-		p = head # [0,
+		hashSet = set()
+		p = head
 		while p:
-			if node_dict.get(p, None): # new here
-				return True # exist a cricle
+			if p in hashSet:
+				return True
 			else:
-				node_dict[p] = 1
+				hashSet.add(p)
 			p = p.next
-		
 		return False
 
-	def hasCycle(self, head: Optional[ListNode]) -> bool:
+
+	def hasCycle1(self, head: Optional[ListNode]) -> bool:
 		'''
 		Master's Solution: fast and slow pointer
 		'''
