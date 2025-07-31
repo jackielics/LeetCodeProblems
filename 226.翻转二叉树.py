@@ -11,10 +11,11 @@
 #         self.val = val
 #         self.left = left
 #         self.right = right
+
 class Solution:
 	def invertTree0(self, root: Optional[TreeNode]) -> Optional[TreeNode]:
 		'''
-        My Solution 0: Recursion
+		My Solution 0: Recursion
 		Time Complexity: O(n)
 		Space Complexity: O(n)
 		'''
@@ -22,27 +23,25 @@ class Solution:
 		if not root:
 			return None
 		# recursion body: swap left and right tree
-		left, right = root.left, root.right # store it first
-		
-		root.left = self.invertTree(right)
-		root.right = self.invertTree(left)
+		root.left, root.right = self.invertTree(root.right), self.invertTree(root.left)
 
 		return root 
-	
-	def invertTree(self, root: Optional[TreeNode]) -> Optional[TreeNode]:
+
+	def invertTree1(self, root: Optional[TreeNode]) -> Optional[TreeNode]:
 		'''
-        My Solution 1: Recursion
-		Time Complexity: O(n)
-		Space Complexity: O(n)
+		Stack
 		'''
-		# recurison exit
 		if not root:
 			return None
-		# recursion body: swap left and right tree
-		root.right, root.left = root.left, root.right # store it first
+		stack = [root]
 
-		self.invertTree(root.left)
-		self.invertTree(root.right)
+		while stack:
+			curNode = stack.pop()
+			if curNode.left:
+				stack.append(curNode.left)
+			if curNode.right:
+				stack.append(curNode.right)
+			curNode.left, curNode.right = curNode.right, curNode.left
+		return root
 
-		return root 
 # @lc code=end
