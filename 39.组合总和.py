@@ -6,35 +6,35 @@
 
 # @lc code=start
 class Solution:
-	def combinationSum0(self, candidates: List[int], target: int) -> List[List[int]]:
+	def combinationSum(self, candidates: List[int], target: int) -> List[List[int]]:
 		'''classic divergent backtracking'''
 		if min(candidates) > target:
 			return []
 		
 		res = []
-		def backtrack(i, cur, total):
+		curset = [] # current list of elems used
+		def backtrack(i, total):
 			'''
 			i: start index
-			cur: current list of elems used
 			total: current total
 			'''
 			# Bound
 			if total == target: # meet target
-				res.append(cur.copy()) # shallow copy(enough for [int])
+				res.append(curset.copy()) # shallow copy(enough for [int])
 				return
 			elif total > target or i >= len(candidates):
 				return
 
-			cur.append(candidates[i])
-			backtrack(i, cur, total + candidates[i]) # try [i]
-			cur.pop()
-			backtrack(i + 1, cur, total) # skip [i]
+			curset.append(candidates[i])
+			backtrack(i, total + candidates[i]) # try [i]
+			curset.pop()
+			backtrack(i + 1, total) # skip [i]
 
-		backtrack(0, [], 0) # start from i=0, cur=[], total=0
+		backtrack(0, 0) # start from i=0, total=0
 		
 		return res
 
-	def combinationSum(self, candidates: List[int], target: int) -> List[List[int]]:
+	def combinationSum1(self, candidates: List[int], target: int) -> List[List[int]]:
 		'''for iteration backtracking'''
 		if min(candidates) > target:
 			return []
