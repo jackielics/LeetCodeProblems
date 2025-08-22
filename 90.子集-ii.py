@@ -12,7 +12,7 @@ class Solution:
         subset = []
         def backtrack(i):
             if i >= len(nums):
-                res.append(subset.copy())
+                res.append(subset.copy())rr
                 return
 
             subset.append(nums[i])
