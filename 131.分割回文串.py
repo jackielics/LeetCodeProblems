@@ -10,7 +10,7 @@ class Solution:
         def is_panli(i, j):
             if i >= j:
                 return True
-            return is_panli(i + 1, j - 1) if s[i] == s[j] else False
+            return s[i] == s[j] and is_panli(i + 1, j - 1)
 
         res = []
         part = []
