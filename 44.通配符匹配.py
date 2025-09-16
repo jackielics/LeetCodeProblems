@@ -1,0 +1,73 @@
+#
+# @lc app=leetcode.cn id=44 lang=python3
+#
+# [44] 通配符匹配
+#
+
+# @lc code=start
+class Solution:
+    def isMatch(self, src: str, pat: str) -> bool:
+        if not src:
+            for x in pat:
+                if x != '*':
+                    return False
+            return True
+        @lru_cache(maxsize=None)
+        def backtrack(p1, p2)->bool:
+            # 返回 src[p1:] == pat[p2:] ?
+            # 遇到*再次进入递归
+
+            while p1 < len(src) and p2 < len(pat):
+                if pat[p2] == '*': # see after *
+                    # 难点在于，*可以匹配任意多位，要看*后面是什么，如果是正常
+                    # 多个连续*：去重
+                    while p2 < len(pat) - 1 and pat[p2+1] == '*':
+                        p2 += 1
+                    # *在末尾：通过
+                    if p2 == len(pat) - 1:
+                        return True
+                    # 依次找匹配的
+                    while p1 < len(src):
+                        if backtrack(p1, p2+1):
+                        # if (pat[p2+1] == '?' or src[p1] == pat[p2+1]) and backtrack(p1, p2+1):
+                            return True
+                        else: # 继续找匹配的
+                            p1 += 1
+                    return False # 后序不匹配
+                elif pat[p2] == '?' or src[p1] == pat[p2]:
+                        p1 += 1
+                        p2 += 1
+                else: # 字符串不匹配
+                    return False
+            while p2 < len(pat) and pat[p2] == '*':
+                p2 += 1
+
+            return p1 == len(src) and p2 == len(pat)
+        # 长度是个问题，难以同时到达末尾，需要解决
+        return backtrack(0, 0)
+    
+    def isMatch(self, s: str, p: str) -> bool:
+        m, n = len(s), len(p)
+        def dfs(i: int, j: int) -> bool:
+            # 边界判断
+            if i < 0: 
+                if j < 0: 
+                    return True
+                if p[j] != '*': 
+                    return False
+                return dfs(i, j - 1)
+            elif j < 0: 
+                return False
+            
+            # 状态转移
+            if s[i] == p[j] or p[j] == '?': 
+                return dfs(i - 1, j - 1)
+            elif p[j] == '*':  
+                # '*'匹配多个字符 or '*'当成空串 
+                return dfs(i - 1, j) or dfs(i, j - 1)
+            else:  
+                return False
+
+        return dfs(m - 1, n - 1)
+# @lc code=end
+
