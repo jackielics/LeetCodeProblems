@@ -17,4 +17,3 @@ class Solution:
             return []
         return [root.val] + self.preorderTraversal(root.left) + self.preorderTraversal(root.right)
 # @lc code=end
-
