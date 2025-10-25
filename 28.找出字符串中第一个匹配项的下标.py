@@ -10,4 +10,3 @@ class Solution:
         # 也可以通过KMP算法但是很复杂
         return haystack.find(needle)
 # @lc code=end
-
