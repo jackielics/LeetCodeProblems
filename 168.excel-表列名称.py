@@ -10,6 +10,7 @@ class Solution:
         # 无零26进制：注意末位
         res = ''
         while columnNumber:
+            # -1：将A(1)对应到0
             columnNumber, rmn = divmod(columnNumber-1, 26)
             res = chr(ord('A') + rmn) + res
                 
